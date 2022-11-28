@@ -1,3 +1,6 @@
+# Project-specific
+/lib
+
 # Logs
 logs
 *.log
