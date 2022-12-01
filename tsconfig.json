@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "lib": ["es2022", "dom"],
+    "target": "ES2016",
+    "lib": ["ES2022", "WebWorker"],
     "module": "commonjs",
     "outDir": "./lib",
     "declaration": true,

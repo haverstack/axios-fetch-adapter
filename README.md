@@ -28,6 +28,14 @@ const client = new Client({
 });
 ```
 
+## Testing
+Tests are run with:
+```sh
+npm run test
+```
+
+A [Miniflare](https://miniflare.dev) testing environment is used in order to simulate a Cloudflare Worker or a ServiceWorker. This testing environment is also useful because Node does not have a native implementation of `fetch`.
+
 ## Acknowledgements
 The code in this repo draws heavily from the following projects:
 - [vespaiach/axios-fetch-adapter](https://github.com/vespaiach/axios-fetch-adapter): Most of the code in this repo was copied from here. Licensed MIT.
