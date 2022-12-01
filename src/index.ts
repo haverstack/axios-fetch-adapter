@@ -124,7 +124,7 @@ function createRequest(config: AxiosRequestConfig): Request {
     const password = config.auth.password
       ? decodeURI(encodeURIComponent(config.auth.password))
       : "";
-    headers.set("Authorization", `Basic ${Buffer.from(username + ":" + password, "base64")}`);
+    headers.set("Authorization", `Basic ${Buffer.from(username + ":" + password).toString("base64")}`);
   }
 
   if (config.method === undefined) {
