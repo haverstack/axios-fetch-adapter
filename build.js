@@ -7,7 +7,8 @@ const shared = {
 
 build({
   ...shared,
-  outdir: 'lib'
+  outdir: 'lib',
+  format: 'cjs'
 });
 
 build({
