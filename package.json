@@ -8,8 +8,13 @@
   "scripts": {
     "build:js": "node build.js",
     "build:types": "tsc --declaration --emitDeclarationOnly && npm run copy-types",
-    "build": "npm run build:js && npm run build:types",
+    "build": "npm run clean:lib && run-s build:*",
     "check": "npm run test && npm run lint && npm run format:check",
+    "clean": "run-p clean:*",
+    "clean:lib": "rimraf ./lib",
+    "clean:coverage": "rimraf ./coverage",
+    "clean:modules": "rimraf ./node_modules",
+    "clean:packages": "rimraf ./*.tgz",
     "deploy": "npm run build && npm publish",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "prettier --ignore-path .gitignore \"src/**\"",
@@ -18,7 +23,7 @@
     "copy-types": "ncp ./src/types.d.ts ./lib/types.d.ts",
     "lint": "eslint --ignore-path .gitignore \"src/**\"",
     "lint:fix": "npm run lint -- --fix",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "npm run build && cross-env NODE_ENV=test jest"
   },
   "files": [
     "/lib",
@@ -53,7 +58,9 @@
     "jest": "^29.3.1",
     "jest-environment-miniflare": "^2.11.0",
     "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.0",
+    "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",
     "typescript": "^4.9.3"
   },
