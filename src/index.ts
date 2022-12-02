@@ -34,6 +34,9 @@ import type {
   RawAxiosResponseHeaders
 } from "./types";
 
+import buildURL from 'axios/lib/helpers/buildURL';
+import buildFullPath from 'axios/lib/core/buildFullPath';
+
 export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPromise {
   const request = createRequest(config);
   const promiseChain = [getResponse(request, config)];
@@ -148,8 +151,9 @@ function createRequest(config: AxiosRequestConfig): Request {
   if (config.withCredentials !== undefined) {
     options.credentials = config.withCredentials ? "include" : "omit";
   }
-
-  const url = new URL(config.url ? config.url : "", config.baseURL);
+  
+  const fullPath = buildFullPath(config.baseURL, config.url);
+  const url = buildURL(fullPath, config.params, config.paramsSerializer);
   return new Request(url, options);
 }
 
