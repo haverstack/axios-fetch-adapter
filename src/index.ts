@@ -37,11 +37,12 @@ import type {
 export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPromise {
   const request = createRequest(config);
   const promiseChain = [getResponse(request, config)];
+  let timer: NodeJS.Timeout | null = null;
 
   if (config.timeout && config.timeout > 0) {
     promiseChain.push(
       new Promise((_, reject) => {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           const message = config.timeoutErrorMessage
             ? config.timeoutErrorMessage
             : "timeout of " + config.timeout + "ms exceeded";
@@ -52,6 +53,10 @@ export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPro
   }
 
   const response = await Promise.race(promiseChain);
+  // Cancel the timeout timer if it's set
+  if (timer !== null) {
+    clearTimeout(timer);
+  }
   return new Promise((resolve, reject) => {
     if (response instanceof Error) {
       reject(response);

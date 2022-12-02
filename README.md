@@ -44,8 +44,8 @@ A [Miniflare](https://miniflare.dev) testing environment is used in order to sim
 
 ## Acknowledgements
 The code in this repo draws heavily from the following projects:
-- [vespaiach/axios-fetch-adapter](https://github.com/vespaiach/axios-fetch-adapter): Most of the code in this repo was copied from here. Licensed MIT.
-- [axios/axios](https://github.com/axios/axios): Rather than import `axios` for this repo, the necessary types and utility functions were copied directly. Licensed MIT.
+- [vespaiach/axios-fetch-adapter](https://github.com/vespaiach/axios-fetch-adapter): Most of the initial code in this repo was copied from here. Licensed MIT.
+- [axios/axios](https://github.com/axios/axios): Rather than import `axios` for this repo, the necessary types were copied directly. Licensed MIT.
 
 ## License
 [MIT](LICENSE)

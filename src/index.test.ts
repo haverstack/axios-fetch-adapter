@@ -32,6 +32,12 @@ test("Supplying only a base URL creates a successful request", async () => {
   expect(result.status).toBe(200);
 });
 
+test("Request completes successfully if timeout is set", async () => {
+  const result = await fetchAdapter({ url, timeout: 1500 });
+  expect(result.status).toBe(200);
+  expect(result.data).toBe(JSON.stringify({ message: "success" }));
+});
+
 test("Failing a timeout will throw an error", async () => {
   try {
     await fetchAdapter({ url, timeout: 1 });
