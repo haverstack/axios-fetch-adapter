@@ -28,10 +28,16 @@ const client = new Client({
 });
 ```
 
-## Testing
-Tests are run with:
+## Development
 ```sh
+# Run tests
 npm run test
+
+# Check tests, linting, and formatting
+npm run check
+
+# Fix linting and formatting
+npm run fix
 ```
 
 A [Miniflare](https://miniflare.dev) testing environment is used in order to simulate a Cloudflare Worker or a ServiceWorker. This testing environment is also useful because Node does not have a native implementation of `fetch`.
