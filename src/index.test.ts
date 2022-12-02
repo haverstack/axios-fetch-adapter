@@ -1,5 +1,5 @@
 import fetchAdapter from ".";
-import { AxiosError } from "./types";
+import type { AxiosError } from "./types";
 
 // Test URL
 const url = "http://localhost:1";
@@ -39,6 +39,7 @@ test("Failing a timeout will throw an error", async () => {
   } catch (e: unknown) {
     const error = e as AxiosError;
     expect(error.message).toBe("timeout of 1ms exceeded");
+    expect(error.code).toBe("ETIMEDOUT");
     expect(error.config?.url).toBe(url);
     // Use this opportunity to test JSON output as well
     const errorJson: any = error.toJSON();
@@ -96,6 +97,7 @@ test("Custom validation can be set for responses", async () => {
   } catch (e: unknown) {
     const error = e as AxiosError;
     expect(error.message).toBe("Request failed with status code 200");
+    expect(error.code).toBe("ERR_BAD_OPTION");
     // Use this opportunity to test non-null statuses
     const errorJson: any = error.toJSON();
     expect(errorJson.status).toBeTruthy();
@@ -128,5 +130,6 @@ test("Invalid request will throw an error", async () => {
   } catch (e: unknown) {
     const error = e as AxiosError;
     expect(error.message).toBe("Network Error");
+    expect(error.code).toBe("ERR_NETWORK");
   }
 });

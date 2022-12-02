@@ -40,12 +40,12 @@ export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPro
 
   if (config.timeout && config.timeout > 0) {
     promiseChain.push(
-      new Promise((resolve, reject) => {
+      new Promise((_, reject) => {
         setTimeout(() => {
           const message = config.timeoutErrorMessage
             ? config.timeoutErrorMessage
             : "timeout of " + config.timeout + "ms exceeded";
-          reject(createError(message, config, "ECONNABORTED", request));
+          reject(createError(message, config, "ETIMEDOUT", request));
         }, config.timeout);
       })
     );
@@ -175,6 +175,7 @@ function createError(
 }
 
 function getErrorCodeFromStatus(status: number): string {
-  // 400 errors are bad requests, while 500 errors are bad responses
-  return ["ERR_BAD_REQUEST", "ERR_BAD_RESPONSE"][Math.floor(status / 100) - 4];
+  // 400 errors are bad requests, 500 errors are bad responses, and
+  // everything else is probably a bad validation function
+  return ["ERR_BAD_REQUEST", "ERR_BAD_RESPONSE"][Math.floor(status / 100) - 4] || "ERR_BAD_OPTION";
 }
