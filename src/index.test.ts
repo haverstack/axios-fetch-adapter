@@ -6,7 +6,7 @@ const url = "http://localhost:1";
 
 // Utilities
 const { toString } = Object.prototype;
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Mock fetch to avoid making real network requests
 const fetchSpy = jest.spyOn(globalThis, "fetch");
@@ -16,25 +16,25 @@ fetchSpy.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit)
   await delay(10);
   if (req.method === "POST") {
     const url = new URL(req.url);
-    return new Response(JSON.stringify({data: req.body, path: url.pathname}));
+    return new Response(JSON.stringify({ data: req.body, path: url.pathname }));
   }
-  return new Response(JSON.stringify({message: "success"}));
+  return new Response(JSON.stringify({ message: "success" }));
 });
 
 test("Regular GET request is successful", async () => {
-  const result = await fetchAdapter({url});
+  const result = await fetchAdapter({ url });
   expect(result.status).toBe(200);
-  expect(result.data).toBe(JSON.stringify({message: "success"}));
+  expect(result.data).toBe(JSON.stringify({ message: "success" }));
 });
 
 test("Supplying only a base URL creates a successful request", async () => {
-  const result = await fetchAdapter({baseURL: url});
+  const result = await fetchAdapter({ baseURL: url });
   expect(result.status).toBe(200);
 });
 
 test("Failing a timeout will throw an error", async () => {
   try {
-    await fetchAdapter({url, timeout: 1});
+    await fetchAdapter({ url, timeout: 1 });
     throw new Error("Timeout didn't throw");
   } catch (e: unknown) {
     const error = e as AxiosError;
@@ -50,7 +50,7 @@ test("Failing a timeout will throw an error", async () => {
 test("Set custom timeout message", async () => {
   const timeoutErrorMessage = "YOU TIMED OUT!";
   try {
-    await fetchAdapter({url, timeout: 1, timeoutErrorMessage});
+    await fetchAdapter({ url, timeout: 1, timeoutErrorMessage });
     throw new Error("Timeout didn't throw");
   } catch (e: unknown) {
     const error = e as AxiosError;
@@ -59,40 +59,43 @@ test("Set custom timeout message", async () => {
 });
 
 test("Relative URLs can be combined with a base URL", async () => {
-  const result = await fetchAdapter({baseURL: url, url: "/foo"});
+  const result = await fetchAdapter({ baseURL: url, url: "/foo" });
   expect(result.request.url).toBe(`${url}/foo`);
 });
 
 test("Setting config response types will set response data", async () => {
-  const result1 = await fetchAdapter({url, responseType: "arraybuffer"});
+  const result1 = await fetchAdapter({ url, responseType: "arraybuffer" });
   expect(result1.data instanceof ArrayBuffer).toBe(true);
   expect(toString.call(result1.data)).toBe("[object ArrayBuffer]");
 
-  const result2 = await fetchAdapter({url, responseType: "blob"});
+  const result2 = await fetchAdapter({ url, responseType: "blob" });
   expect(result2.data instanceof Blob).toBe(true);
   expect(toString.call(result2.data)).toBe("[object Blob]");
 
-  const result3 = await fetchAdapter({url, responseType: "json"});
+  const result3 = await fetchAdapter({ url, responseType: "json" });
   expect(result3.data instanceof Object).toBe(true);
-  expect(result3.data).toEqual({message: "success"});
+  expect(result3.data).toEqual({ message: "success" });
 });
 
 test("Basic authorization will set request headers", async () => {
   const username = "foo";
   const password = "bar";
-  const result1 = await fetchAdapter({url, auth: {username, password}});
+  const result1 = await fetchAdapter({ url, auth: { username, password } });
   expect(result1.request.headers.get("authorization")).toBe("Basic Zm9vOmJhcg==");
 
-  const result2 = await fetchAdapter({url, auth: {username: "", password: ""}});
+  const result2 = await fetchAdapter({ url, auth: { username: "", password: "" } });
   expect(result2.request.headers.get("authorization")).toBe("Basic Og==");
 });
 
 test("Custom validation can be set for responses", async () => {
   try {
     // Always fail the request
-    await fetchAdapter({url, validateStatus: (_: number) => {
-      return false;
-    }});
+    await fetchAdapter({
+      url,
+      validateStatus: (_: number) => {
+        return false;
+      }
+    });
     throw new Error("Validation didn't throw");
   } catch (e: unknown) {
     const error = e as AxiosError;
@@ -105,8 +108,8 @@ test("Custom validation can be set for responses", async () => {
 });
 
 test("POST requests send data", async () => {
-  const result = await fetchAdapter({url, method: "post", data: JSON.stringify({foo: "bar"})});
-  expect(result.request.method).toBe('POST');
+  const result = await fetchAdapter({ url, method: "post", data: JSON.stringify({ foo: "bar" }) });
+  expect(result.request.method).toBe("POST");
   expect(result.request.bodyUsed).toBe(true);
 });
 
@@ -114,10 +117,10 @@ test("Credentials options are set with `withCredentials` option", async () => {
   // Per the Cloudflare Workers runtime, the `credentials` property won't be
   // implemented because it doesn't make sense in this environment:
   // https://github.com/cloudflare/workerd/blob/4e5a05813d4336b15826fd3bda7faedf829c830c/src/workerd/api/http.h#L491-L498
-  const result1 = await fetchAdapter({url, withCredentials: true});
+  const result1 = await fetchAdapter({ url, withCredentials: true });
   expect(result1.status).toBe(200);
 
-  const result2 = await fetchAdapter({url, withCredentials: false});
+  const result2 = await fetchAdapter({ url, withCredentials: false });
   expect(result2.status).toBe(200);
 });
 
@@ -125,7 +128,7 @@ test("Invalid request will throw an error", async () => {
   // Disables fetch mock for the rest of this file
   jest.restoreAllMocks();
   try {
-    await fetchAdapter({url});
+    await fetchAdapter({ url });
     throw new Error("Invalid request didn't throw");
   } catch (e: unknown) {
     const error = e as AxiosError;
