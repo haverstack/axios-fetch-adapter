@@ -8,6 +8,11 @@ test("Regular GET request is successful", async () => {
   expect(result.status).toBe(200);
 });
 
+test("Supplying only a base URL creates a successful request", async () => {
+  const result = await fetchAdapter({baseURL: "http://example.com"});
+  expect(result.status).toBe(200);
+});
+
 test("Failing a timeout will throw an error", async () => {
   try {
     await fetchAdapter({url: "http://example.com", timeout: 1});
@@ -16,8 +21,9 @@ test("Failing a timeout will throw an error", async () => {
     const error = e as AxiosError;
     expect(error.message).toBe("timeout of 1ms exceeded");
     expect(error.config?.url).toBe("http://example.com");
+    // Use this opportunity to test JSON output as well
     const errorJson: any = error.toJSON();
-    expect(errorJson["message"]).toBe("timeout of 1ms exceeded");
+    expect(errorJson.message).toBe("timeout of 1ms exceeded");
   }
 });
 
@@ -71,6 +77,9 @@ test("Custom validation can be set for responses", async () => {
   } catch (e: unknown) {
     const error = e as AxiosError;
     expect(error.message).toBe("Request failed with status code 200");
+    // Use this opportunity to test non-null statuses
+    const errorJson: any = error.toJSON();
+    expect(errorJson.status).toBeTruthy();
   }
 });
 
@@ -91,11 +100,11 @@ test("POST requests send data", async () => {
 });
 
 test("Credentials options are set with `withCredentials` option", async () => {
+  // The `credentials` property of requests is not implemented on service workers...
   const result1 = await fetchAdapter({url: "http://example.com", withCredentials: true});
-  // The `credentials` property of requests is not implemented on service workers...
   expect(result1.status).toBe(200);
+
   const result2 = await fetchAdapter({url: "http://example.com", withCredentials: false});
-  // The `credentials` property of requests is not implemented on service workers...
   expect(result2.status).toBe(200);
 });
 

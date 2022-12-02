@@ -141,8 +141,8 @@ function createRequest(config: AxiosRequestConfig): Request {
     options.credentials = config.withCredentials ? "include" : "omit";
   }
 
-  const fullPath = buildFullPath(config.baseURL, config.url);
-  return new Request(fullPath, options);
+  const url = new URL(config.url ? config.url : "", config.baseURL);
+  return new Request(url, options);
 }
 
 function createError(
@@ -177,21 +177,4 @@ function createError(
 function getErrorCodeFromStatus(status: number): string {
   // 400 errors are bad requests, while 500 errors are bad responses
   return ["ERR_BAD_REQUEST", "ERR_BAD_RESPONSE"][Math.floor(status / 100) - 4];
-}
-
-function buildFullPath(baseURL: string | undefined, requestedURL: string | undefined): string {
-  if (baseURL && requestedURL && !isAbsoluteURL(requestedURL)) {
-    return combineURLs(baseURL, requestedURL);
-  }
-  return requestedURL ? requestedURL : "";
-}
-
-function combineURLs(baseURL: string, relativeURL: string): string {
-  return relativeURL
-    ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "")
-    : baseURL;
-}
-
-function isAbsoluteURL(url: string): boolean {
-  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 }
