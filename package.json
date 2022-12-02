@@ -10,6 +10,7 @@
     "build:types": "tsc --declaration --emitDeclarationOnly && npm run copy-types",
     "build": "npm run build:js && npm run build:types",
     "check": "npm run test && npm run lint && npm run format:check",
+    "deploy": "npm run build && npm publish",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "prettier --ignore-path .gitignore \"src/**\"",
     "format:check": "npm run format -- --check",
