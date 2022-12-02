@@ -1,6 +1,6 @@
 {
   "name": "@haverstack/axios-fetch-adapter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An Axios adapter that uses native fetch. Useful for Cloudflare Workers and ServiceWorker environments.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -90,18 +90,22 @@
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "root": true,
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended"
     ],
-    "ignorePatterns": ["types.d.ts"],
+    "ignorePatterns": [
+      "types.d.ts"
+    ],
     "rules": {
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { 
+        {
           "argsIgnorePattern": "^_",
           "varsIgnorePattern": "^_",
           "caughtErrorsIgnorePattern": "^_"
