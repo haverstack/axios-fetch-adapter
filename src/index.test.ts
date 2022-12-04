@@ -13,7 +13,7 @@ const fetchSpy = jest.spyOn(globalThis, "fetch");
 fetchSpy.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
   const req = new Request(input, init);
   // Simulate network delay
-  await delay(10);
+  await delay(2);
   if (req.method === "POST") {
     const url = new URL(req.url);
     return new Response(JSON.stringify({ data: req.body, path: url.pathname }));
@@ -29,7 +29,13 @@ test("Regular GET request is successful", async () => {
 
 test("Supplying only a base URL creates a successful request", async () => {
   const result = await fetchAdapter({ baseURL: url });
+  expect(result.request.url).toBe(`${url}/`);
   expect(result.status).toBe(200);
+});
+
+test("Base URLs can also include a path", async () => {
+  const result = await fetchAdapter({ baseURL: `${url}/foo`, url: "/bar" });
+  expect(result.request.url).toBe(`${url}/foo/bar`);
 });
 
 test("Request completes successfully if timeout is set", async () => {
