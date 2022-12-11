@@ -33,6 +33,7 @@ import type {
   AxiosResponse,
   RawAxiosResponseHeaders
 } from "./types";
+import { buildFullPath } from "./axiosHelpers";
 
 export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPromise {
   const request = createRequest(config);
@@ -186,22 +187,4 @@ function getErrorCodeFromStatus(status: number): string {
   // 400 errors are bad requests, 500 errors are bad responses, and
   // everything else is probably a bad validation function
   return ["ERR_BAD_REQUEST", "ERR_BAD_RESPONSE"][Math.floor(status / 100) - 4] || "ERR_BAD_OPTION";
-}
-
-function buildFullPath(requestedURL: string, baseURL: string | undefined): string {
-  if (requestedURL && baseURL && !isAbsoluteURL(requestedURL)) {
-    return combineURLs(baseURL, requestedURL);
-  }
-  if (!requestedURL && baseURL) {
-    return baseURL;
-  }
-  return requestedURL;
-}
-
-function combineURLs(baseURL: string, relativeURL: string): string {
-  return baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "");
-}
-
-function isAbsoluteURL(url: string): boolean {
-  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 }

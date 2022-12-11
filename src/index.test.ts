@@ -13,7 +13,7 @@ const fetchSpy = jest.spyOn(globalThis, "fetch");
 fetchSpy.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
   const req = new Request(input, init);
   // Simulate network delay
-  await delay(2);
+  await delay(5);
   if (req.method === "POST") {
     const url = new URL(req.url);
     return new Response(JSON.stringify({ data: req.body, path: url.pathname }));
@@ -68,11 +68,6 @@ test("Set custom timeout message", async () => {
     const error = e as AxiosError;
     expect(error.message).toBe(timeoutErrorMessage);
   }
-});
-
-test("Relative URLs can be combined with a base URL", async () => {
-  const result = await fetchAdapter({ baseURL: url, url: "/foo" });
-  expect(result.request.url).toBe(`${url}/foo`);
 });
 
 test("Setting config response types will set response data", async () => {
