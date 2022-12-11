@@ -1,4 +1,9 @@
 # axios-fetch-adapter
+[![npm badge](https://img.shields.io/npm/v/@haverstack/axios-fetch-adapter)](https://www.npmjs.com/package/@haverstack/axios-fetch-adapter)
+[![checks badge](https://img.shields.io/github/checks-status/haverstack/axios-fetch-adapter/main)](https://github.com/haverstack/axios-fetch-adapter/actions)
+[![codecov badge](https://codecov.io/gh/haverstack/axios-fetch-adapter/branch/main/graph/badge.svg?token=J2J0ANDB3F)](https://codecov.io/gh/haverstack/axios-fetch-adapter)
+[![license badge](https://img.shields.io/github/license/haverstack/axios-fetch-adapter)](./LICENSE)
+
 An Axios adapter that uses native `fetch`. Useful for Cloudflare Workers and ServiceWorker environments.
 
 ## Install
