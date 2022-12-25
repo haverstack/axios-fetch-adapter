@@ -1,7 +1,4 @@
-// Sources:\
-//   - https://github.com/axios/axios/blob/v1.x/lib/core/buildFullPath.js
-//   - https://github.com/axios/axios/blob/v1.x/lib/helpers/isAbsoluteURL.js
-//   - https://github.com/axios/axios/blob/v1.x/lib/helpers/combineURLs.js
+// Source: https://github.com/axios/axios/blob/v1.x/lib/core/buildFullPath.js
 // Accessed: 2022-12-11
 
 // Axios License Text:
@@ -14,6 +11,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+import combineURLs from "./axios/lib/helpers/combineURLs";
+import isAbsoluteURL from "./axios/lib/helpers/isAbsoluteURL";
+
 export function buildFullPath(requestedURL: string, baseURL?: string): string {
   if (requestedURL && baseURL && !isAbsoluteURL(requestedURL)) {
     return combineURLs(baseURL, requestedURL);
@@ -22,12 +22,4 @@ export function buildFullPath(requestedURL: string, baseURL?: string): string {
     return baseURL;
   }
   return requestedURL;
-}
-
-export function combineURLs(baseURL: string, relativeURL: string): string {
-  return baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "");
-}
-
-export function isAbsoluteURL(url: string): boolean {
-  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 }
