@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-import utils from '../utils.js';
-import AxiosURLSearchParams from './AxiosURLSearchParams.js';
+import utils from "../utils.js";
+import AxiosURLSearchParams from "./AxiosURLSearchParams.js";
 
 /**
  * It replaces all instances of the characters `:`, `$`, `,`, `+`, `[`, and `]` with their
@@ -12,13 +12,13 @@ import AxiosURLSearchParams from './AxiosURLSearchParams.js';
  * @returns {string} The encoded value.
  */
 function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
+  return encodeURIComponent(val)
+    .replace(/%3A/gi, ":")
+    .replace(/%24/g, "$")
+    .replace(/%2C/gi, ",")
+    .replace(/%20/g, "+")
+    .replace(/%5B/gi, "[")
+    .replace(/%5D/gi, "]");
 }
 
 /**
@@ -35,8 +35,8 @@ export default function buildURL(url, params, options) {
   if (!params) {
     return url;
   }
-  
-  const _encode = options && options.encode || encode;
+
+  const _encode = (options && options.encode) || encode;
 
   const serializeFn = options && options.serialize;
 
@@ -45,9 +45,9 @@ export default function buildURL(url, params, options) {
   if (serializeFn) {
     serializedParams = serializeFn(params, options);
   } else {
-    serializedParams = utils.isURLSearchParams(params) ?
-      params.toString() :
-      new AxiosURLSearchParams(params, options).toString(_encode);
+    serializedParams = utils.isURLSearchParams(params)
+      ? params.toString()
+      : new AxiosURLSearchParams(params, options).toString(_encode);
   }
 
   if (serializedParams) {
@@ -56,7 +56,7 @@ export default function buildURL(url, params, options) {
     if (hashmarkIndex !== -1) {
       url = url.slice(0, hashmarkIndex);
     }
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+    url += (url.indexOf("?") === -1 ? "?" : "&") + serializedParams;
   }
 
   return url;

@@ -10,21 +10,32 @@ interface CommonHeaders {
   common: AxiosHeaders;
 }
 
-type AxiosHeaderMatcher = (this: AxiosHeaders, value: string, name: string, headers: RawAxiosHeaders) => boolean;
+type AxiosHeaderMatcher = (
+  this: AxiosHeaders,
+  value: string,
+  name: string,
+  headers: RawAxiosHeaders
+) => boolean;
 
-type AxiosHeaderSetter = (value: AxiosHeaderValue, rewrite?: boolean | AxiosHeaderMatcher) => AxiosHeaders;
+type AxiosHeaderSetter = (
+  value: AxiosHeaderValue,
+  rewrite?: boolean | AxiosHeaderMatcher
+) => AxiosHeaders;
 
-type AxiosHeaderGetter = ((parser?: RegExp) => RegExpExecArray | null) |
-    ((matcher?: AxiosHeaderMatcher) => AxiosHeaderValue);
+type AxiosHeaderGetter =
+  | ((parser?: RegExp) => RegExpExecArray | null)
+  | ((matcher?: AxiosHeaderMatcher) => AxiosHeaderValue);
 
 type AxiosHeaderTester = (matcher?: AxiosHeaderMatcher) => boolean;
 
 export class AxiosHeaders {
-  constructor(
-      headers?: RawAxiosHeaders | AxiosHeaders
-  );
+  constructor(headers?: RawAxiosHeaders | AxiosHeaders);
 
-  set(headerName?: string, value?: AxiosHeaderValue, rewrite?: boolean | AxiosHeaderMatcher): AxiosHeaders;
+  set(
+    headerName?: string,
+    value?: AxiosHeaderValue,
+    rewrite?: boolean | AxiosHeaderMatcher
+  ): AxiosHeaders;
   set(headers?: RawAxiosHeaders | AxiosHeaders, rewrite?: boolean): AxiosHeaders;
 
   get(headerName: string, parser: RegExp): RegExpExecArray | null;
@@ -73,9 +84,11 @@ export type RawAxiosRequestHeaders = Partial<RawAxiosHeaders & MethodsHeaders & 
 
 export type AxiosRequestHeaders = RawAxiosRequestHeaders & AxiosHeaders;
 
-export type RawAxiosResponseHeaders = Partial<Record<string, string> & {
-  "set-cookie"?: string[]
-}>;
+export type RawAxiosResponseHeaders = Partial<
+  Record<string, string> & {
+    "set-cookie"?: string[];
+  }
+>;
 
 export type AxiosResponseHeaders = RawAxiosResponseHeaders & AxiosHeaders;
 
@@ -169,42 +182,58 @@ export enum HttpStatusCode {
   InsufficientStorage = 507,
   LoopDetected = 508,
   NotExtended = 510,
-  NetworkAuthenticationRequired = 511,
+  NetworkAuthenticationRequired = 511
 }
 
 export type Method =
-    | 'get' | 'GET'
-    | 'delete' | 'DELETE'
-    | 'head' | 'HEAD'
-    | 'options' | 'OPTIONS'
-    | 'post' | 'POST'
-    | 'put' | 'PUT'
-    | 'patch' | 'PATCH'
-    | 'purge' | 'PURGE'
-    | 'link' | 'LINK'
-    | 'unlink' | 'UNLINK';
+  | "get"
+  | "GET"
+  | "delete"
+  | "DELETE"
+  | "head"
+  | "HEAD"
+  | "options"
+  | "OPTIONS"
+  | "post"
+  | "POST"
+  | "put"
+  | "PUT"
+  | "patch"
+  | "PATCH"
+  | "purge"
+  | "PURGE"
+  | "link"
+  | "LINK"
+  | "unlink"
+  | "UNLINK";
 
-export type ResponseType =
-    | 'arraybuffer'
-    | 'blob'
-    | 'document'
-    | 'json'
-    | 'text'
-    | 'stream';
+export type ResponseType = "arraybuffer" | "blob" | "document" | "json" | "text" | "stream";
 
 export type responseEncoding =
-    | 'ascii' | 'ASCII'
-    | 'ansi' | 'ANSI'
-    | 'binary' | 'BINARY'
-    | 'base64' | 'BASE64'
-    | 'base64url' | 'BASE64URL'
-    | 'hex' | 'HEX'
-    | 'latin1' | 'LATIN1'
-    | 'ucs-2' | 'UCS-2'
-    | 'ucs2' | 'UCS2'
-    | 'utf-8' | 'UTF-8'
-    | 'utf8' | 'UTF8'
-    | 'utf16le' | 'UTF16LE';
+  | "ascii"
+  | "ASCII"
+  | "ansi"
+  | "ANSI"
+  | "binary"
+  | "BINARY"
+  | "base64"
+  | "BASE64"
+  | "base64url"
+  | "BASE64URL"
+  | "hex"
+  | "HEX"
+  | "latin1"
+  | "LATIN1"
+  | "ucs-2"
+  | "UCS-2"
+  | "ucs2"
+  | "UCS2"
+  | "utf-8"
+  | "UTF-8"
+  | "utf8"
+  | "UTF8"
+  | "utf16le"
+  | "UTF16LE";
 
 export interface TransitionalOptions {
   silentJSONParsing?: boolean;
@@ -227,11 +256,11 @@ export interface FormDataVisitorHelpers {
 
 export interface SerializerVisitor {
   (
-      this: GenericFormData,
-      value: any,
-      key: string | number,
-      path: null | Array<string | number>,
-      helpers: FormDataVisitorHelpers
+    this: GenericFormData,
+    value: any,
+    key: string | number,
+    path: null | Array<string | number>,
+    helpers: FormDataVisitorHelpers
   ): boolean;
 }
 
@@ -243,8 +272,7 @@ export interface SerializerOptions {
 }
 
 // tslint:disable-next-line
-export interface FormSerializerOptions extends SerializerOptions {
-}
+export interface FormSerializerOptions extends SerializerOptions {}
 
 export interface ParamEncoder {
   (value: any, defaultEncoder: (value: any) => any): any;
@@ -279,7 +307,7 @@ export interface AxiosProgressEvent {
 
 type Milliseconds = number;
 
-type AxiosAdapterName = 'xhr' | 'http' | string;
+type AxiosAdapterName = "xhr" | "http" | string;
 
 type AxiosAdapterConfig = AxiosAdapter | AxiosAdapterName;
 
@@ -309,7 +337,10 @@ export interface AxiosRequestConfig<D = any> {
   maxBodyLength?: number;
   maxRedirects?: number;
   maxRate?: number | [MaxUploadRate, MaxDownloadRate];
-  beforeRedirect?: (options: Record<string, any>, responseDetails: {headers: Record<string, string>}) => void;
+  beforeRedirect?: (
+    options: Record<string, any>,
+    responseDetails: { headers: Record<string, string> }
+  ) => void;
   socketPath?: string | null;
   httpAgent?: any;
   httpsAgent?: any;
@@ -339,11 +370,11 @@ export interface HeadersDefaults {
   unlink?: RawAxiosRequestHeaders;
 }
 
-export interface AxiosDefaults<D = any> extends Omit<AxiosRequestConfig<D>, 'headers'> {
+export interface AxiosDefaults<D = any> extends Omit<AxiosRequestConfig<D>, "headers"> {
   headers: HeadersDefaults;
 }
 
-export interface CreateAxiosDefaults<D = any> extends Omit<AxiosRequestConfig<D>, 'headers'> {
+export interface CreateAxiosDefaults<D = any> extends Omit<AxiosRequestConfig<D>, "headers"> {
   headers?: RawAxiosRequestHeaders | AxiosHeaders | Partial<HeadersDefaults>;
 }
 
@@ -358,11 +389,11 @@ export interface AxiosResponse<T = any, D = any> {
 
 export class AxiosError<T = unknown, D = any> extends Error {
   constructor(
-      message?: string,
-      code?: string,
-      config?: AxiosRequestConfig<D>,
-      request?: any,
-      response?: AxiosResponse<T, D>
+    message?: string,
+    code?: string,
+    config?: AxiosRequestConfig<D>,
+    request?: any,
+    response?: AxiosResponse<T, D>
   );
 
   config?: AxiosRequestConfig<D>;
@@ -379,8 +410,8 @@ export class AxiosError<T = unknown, D = any> extends Error {
     config?: AxiosRequestConfig<D>,
     request?: any,
     response?: AxiosResponse<T, D>,
-    customProps?: object,
-): AxiosError<T, D>;
+    customProps?: object
+  ): AxiosError<T, D>;
   static readonly ERR_FR_TOO_MANY_REDIRECTS = "ERR_FR_TOO_MANY_REDIRECTS";
   static readonly ERR_BAD_OPTION_VALUE = "ERR_BAD_OPTION_VALUE";
   static readonly ERR_BAD_OPTION = "ERR_BAD_OPTION";
@@ -395,8 +426,7 @@ export class AxiosError<T = unknown, D = any> extends Error {
   static readonly ETIMEDOUT = "ETIMEDOUT";
 }
 
-export class CanceledError<T> extends AxiosError<T> {
-}
+export class CanceledError<T> extends AxiosError<T> {}
 
 export type AxiosPromise<T = any> = Promise<AxiosResponse<T>>;
 
@@ -434,7 +464,11 @@ export interface AxiosInterceptorOptions {
 }
 
 export interface AxiosInterceptorManager<V> {
-  use(onFulfilled?: ((value: V) => V | Promise<V>) | null, onRejected?: ((error: any) => any) | null, options?: AxiosInterceptorOptions): number;
+  use(
+    onFulfilled?: ((value: V) => V | Promise<V>) | null,
+    onRejected?: ((error: any) => any) | null,
+    options?: AxiosInterceptorOptions
+  ): number;
   eject(id: number): void;
   clear(): void;
 }
@@ -448,26 +482,62 @@ export class Axios {
   };
   getUri(config?: AxiosRequestConfig): string;
   request<T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
-  get<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  delete<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  head<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  options<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  post<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  put<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patch<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  postForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  putForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patchForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  get<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  delete<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  head<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  options<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  post<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  put<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  patch<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  postForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  putForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  patchForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
 }
 
 export interface AxiosInstance extends Axios {
   <T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
   <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
 
-  defaults: Omit<AxiosDefaults, 'headers'> & {
+  defaults: Omit<AxiosDefaults, "headers"> & {
     headers: HeadersDefaults & {
-      [key: string]: AxiosHeaderValue
-    }
+      [key: string]: AxiosHeaderValue;
+    };
   };
 }
 
@@ -481,9 +551,13 @@ export interface GenericHTMLFormElement {
   submit(): void;
 }
 
-export function toFormData(sourceObj: object, targetFormData?: GenericFormData, options?: FormSerializerOptions): GenericFormData;
+export function toFormData(
+  sourceObj: object,
+  targetFormData?: GenericFormData,
+  options?: FormSerializerOptions
+): GenericFormData;
 
-export function formToJSON(form: GenericFormData|GenericHTMLFormElement): object;
+export function formToJSON(form: GenericFormData | GenericHTMLFormElement): object;
 
 export function isAxiosError<T = any, D = any>(payload: any): payload is AxiosError<T, D>;
 

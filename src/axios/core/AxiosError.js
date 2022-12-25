@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import utils from '../lib/utils.js';
+import utils from "../lib/utils.js";
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -19,11 +19,11 @@ function AxiosError(message, code, config, request, response) {
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, this.constructor);
   } else {
-    this.stack = (new Error()).stack;
+    this.stack = new Error().stack;
   }
 
   this.message = message;
-  this.name = 'AxiosError';
+  this.name = "AxiosError";
   code && (this.code = code);
   config && (this.config = config);
   request && (this.request = request);
@@ -56,35 +56,40 @@ const prototype = AxiosError.prototype;
 const descriptors = {};
 
 [
-  'ERR_BAD_OPTION_VALUE',
-  'ERR_BAD_OPTION',
-  'ECONNABORTED',
-  'ETIMEDOUT',
-  'ERR_NETWORK',
-  'ERR_FR_TOO_MANY_REDIRECTS',
-  'ERR_DEPRECATED',
-  'ERR_BAD_RESPONSE',
-  'ERR_BAD_REQUEST',
-  'ERR_CANCELED',
-  'ERR_NOT_SUPPORT',
-  'ERR_INVALID_URL'
-// eslint-disable-next-line func-names
-].forEach(code => {
-  descriptors[code] = {value: code};
+  "ERR_BAD_OPTION_VALUE",
+  "ERR_BAD_OPTION",
+  "ECONNABORTED",
+  "ETIMEDOUT",
+  "ERR_NETWORK",
+  "ERR_FR_TOO_MANY_REDIRECTS",
+  "ERR_DEPRECATED",
+  "ERR_BAD_RESPONSE",
+  "ERR_BAD_REQUEST",
+  "ERR_CANCELED",
+  "ERR_NOT_SUPPORT",
+  "ERR_INVALID_URL"
+  // eslint-disable-next-line func-names
+].forEach((code) => {
+  descriptors[code] = { value: code };
 });
 
 Object.defineProperties(AxiosError, descriptors);
-Object.defineProperty(prototype, 'isAxiosError', {value: true});
+Object.defineProperty(prototype, "isAxiosError", { value: true });
 
 // eslint-disable-next-line func-names
 AxiosError.from = (error, code, config, request, response, customProps) => {
   const axiosError = Object.create(prototype);
 
-  utils.toFlatObject(error, axiosError, function filter(obj) {
-    return obj !== Error.prototype;
-  }, prop => {
-    return prop !== 'isAxiosError';
-  });
+  utils.toFlatObject(
+    error,
+    axiosError,
+    function filter(obj) {
+      return obj !== Error.prototype;
+    },
+    (prop) => {
+      return prop !== "isAxiosError";
+    }
+  );
 
   AxiosError.call(axiosError, error.message, code, config, request, response);
 

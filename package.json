@@ -16,7 +16,7 @@
     "clean:packages": "rimraf ./*.tgz",
     "deploy": "npm run build && npm publish",
     "fix": "npm run lint:fix && npm run format:fix",
-    "format": "prettier --ignore-path .gitignore \"src/**\"",
+    "format": "prettier \"src/**\"",
     "format:check": "npm run format -- --check",
     "format:fix": "npm run format -- --write",
     "lint": "eslint --ignore-path .gitignore \"src/**\"",

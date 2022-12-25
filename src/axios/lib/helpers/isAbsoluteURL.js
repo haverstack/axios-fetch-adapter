@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Determines whether the specified URL is absolute

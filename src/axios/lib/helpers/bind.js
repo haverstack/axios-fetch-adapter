@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 export default function bind(fn, thisArg) {
   return function wrap() {

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import toFormData from './toFormData.js';
+import toFormData from "./toFormData.js";
 
 /**
  * It encodes a string by replacing all characters that are not in the unreserved set with
@@ -12,13 +12,13 @@ import toFormData from './toFormData.js';
  */
 function encode(str) {
   const charMap = {
-    '!': '%21',
-    "'": '%27',
-    '(': '%28',
-    ')': '%29',
-    '~': '%7E',
-    '%20': '+',
-    '%00': '\x00'
+    "!": "%21",
+    "'": "%27",
+    "(": "%28",
+    ")": "%29",
+    "~": "%7E",
+    "%20": "+",
+    "%00": "\x00"
   };
   return encodeURIComponent(str).replace(/[!'()~]|%20|%00/g, function replacer(match) {
     return charMap[match];
@@ -46,13 +46,17 @@ prototype.append = function append(name, value) {
 };
 
 prototype.toString = function toString(encoder) {
-  const _encode = encoder ? function(value) {
-    return encoder.call(this, value, encode);
-  } : encode;
+  const _encode = encoder
+    ? function (value) {
+        return encoder.call(this, value, encode);
+      }
+    : encode;
 
-  return this._pairs.map(function each(pair) {
-    return _encode(pair[0]) + '=' + _encode(pair[1]);
-  }, '').join('&');
+  return this._pairs
+    .map(function each(pair) {
+      return _encode(pair[0]) + "=" + _encode(pair[1]);
+    }, "")
+    .join("&");
 };
 
 export default AxiosURLSearchParams;

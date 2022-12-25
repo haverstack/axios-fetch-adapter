@@ -1,6 +1,5 @@
 # Project-specific
 /lib
-/src/axios
 
 # Logs
 logs
