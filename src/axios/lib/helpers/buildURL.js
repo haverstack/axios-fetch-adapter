@@ -26,7 +26,7 @@ function encode(val) {
  *
  * @param {string} url The base of the url (e.g., http://www.google.com)
  * @param {object} [params] The params to be appended
- * @param {?object} options
+ * @param {object} [options]
  *
  * @returns {string} The formatted url
  */

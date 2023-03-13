@@ -242,7 +242,7 @@ const trim = (str) =>
  * @param {Boolean} [allOwnKeys = false]
  * @returns {any}
  */
-function forEach(obj, fn, { allOwnKeys = false } = {}) {
+function forEach(obj, fn, allOwnKeys = false) {
   // Don't bother if no value provided
   if (obj === null || typeof obj === "undefined") {
     return;
@@ -347,7 +347,7 @@ function merge(/* obj1, obj2, obj3, ... */) {
  * @param {Boolean} [allOwnKeys]
  * @returns {Object} The resulting value of object a
  */
-const extend = (a, b, thisArg, { allOwnKeys } = {}) => {
+const extend = (a, b, thisArg, allOwnKeys) => {
   forEach(
     b,
     (val, key) => {
@@ -357,7 +357,7 @@ const extend = (a, b, thisArg, { allOwnKeys } = {}) => {
         a[key] = val;
       }
     },
-    { allOwnKeys }
+    allOwnKeys
   );
   return a;
 };

@@ -152,7 +152,7 @@ function createRequest(config: AxiosRequestConfig): Request {
   }
 
   const fullPath = buildFullPath(config.url ? config.url : "", config.baseURL);
-  const serializer = config.paramsSerializer ? config.paramsSerializer : null;
+  const serializer = config.paramsSerializer ? config.paramsSerializer : undefined;
   const url = buildURL(fullPath, config.params, serializer);
   return new Request(url, options);
 }
