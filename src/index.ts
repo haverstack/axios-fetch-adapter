@@ -26,17 +26,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import type {
-  AxiosError,
-  AxiosPromise,
-  AxiosRequestConfig,
-  AxiosResponse,
-  RawAxiosResponseHeaders
-} from "./axios";
-import buildURL from "./axios/lib/helpers/buildURL";
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+
+import buildURL from "axios/lib/helpers/buildURL";
 import { buildFullPath } from "./buildFullPath";
 
-export default async function fetchAdapter(config: AxiosRequestConfig): AxiosPromise {
+export default async function fetchAdapter(config: AxiosRequestConfig): Promise<AxiosResponse> {
   const request = createRequest(config);
   const promiseChain = [getResponse(request, config)];
   let timer: NodeJS.Timeout | null = null;
@@ -92,7 +87,7 @@ async function getResponse(
     return createError("Network Error", config, "ERR_NETWORK", request);
   }
 
-  const headers: RawAxiosResponseHeaders = Object.assign({}, stageOne.headers as unknown);
+  const headers: any = Object.assign({}, stageOne.headers as unknown);
   const response: AxiosResponse = {
     status: stageOne.status,
     statusText: stageOne.statusText,

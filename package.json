@@ -1,13 +1,13 @@
 {
   "name": "@haverstack/axios-fetch-adapter",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "An Axios adapter that uses native fetch. Useful for Cloudflare Workers and ServiceWorker environments.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/index.esm.js",
   "scripts": {
     "build:js": "node build.js",
-    "build:types": "tsc --project ./tsconfig.build.json && ncp ./src/axios/index.d.ts ./lib/axios/index.d.ts",
+    "build:types": "tsc --project ./tsconfig.build.json",
     "build": "npm run clean:lib && run-s build:*",
     "check": "npm run test && npm run lint && npm run format:check",
     "clean": "run-p clean:*",
@@ -51,6 +51,7 @@
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
+    "axios": "^0.21.1",
     "cross-env": "^7.0.3",
     "esbuild": "^0.17.11",
     "eslint": "^8.28.0",
@@ -62,6 +63,9 @@
     "rimraf": "^4.4.0",
     "ts-jest": "^29.0.3",
     "typescript": "^4.9.3"
+  },
+  "peerDependencies": {
+    "axios": "^0.21.1"
   },
   "jest": {
     "testEnvironment": "miniflare",
@@ -76,13 +80,11 @@
       "node"
     ],
     "testPathIgnorePatterns": [
-      "lib/",
-      "src/axios/"
+      "lib/"
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**",
-      "!src/axios/**"
+      "src/**"
     ],
     "coveragePathIgnorePatterns": [
       ".d.ts"
@@ -105,9 +107,6 @@
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended"
-    ],
-    "ignorePatterns": [
-      "src/axios/*"
     ],
     "rules": {
       "no-unused-vars": "off",

@@ -1,5 +1,5 @@
 import fetchAdapter from ".";
-import type { AxiosError } from "./axios";
+import type { AxiosError } from "axios";
 
 // Test URL
 const url = "http://localhost:1";
@@ -132,17 +132,23 @@ test("Credentials options are set with `withCredentials` option", async () => {
 });
 
 test("Serialization set with `paramsSerializer` produces correct results", async () => {
+  const paramsSerializer = (value: any) => {
+    if (typeof value == "object") {
+      const outputPairs = [];
+      for (const key in value) {
+        outputPairs.push(`${key}=${value[key]}`);
+      }
+      return outputPairs.join("&");
+    }
+    if (typeof value == "number") {
+      return value.toString();
+    }
+    return value;
+  };
   const result = await fetchAdapter({
     url,
-    params: { foo: 123 },
-    paramsSerializer: {
-      encode: (value) => {
-        if (typeof value == "number") {
-          return (value - 23).toString();
-        }
-        return value;
-      }
-    }
+    params: { foo: 100 },
+    paramsSerializer
   });
   expect(result.request.url).toBe(`${url}/?foo=100`);
 });

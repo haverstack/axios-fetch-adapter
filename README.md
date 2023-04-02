@@ -6,6 +6,8 @@
 
 An Axios adapter that uses native `fetch`. Useful for Cloudflare Workers and ServiceWorker environments.
 
+> **Note:** This adapter was designed for version `0.21.1` of Axios, which is still used in prominent e-commerce SDKs.
+
 ## Install
 ```sh
 npm install @haverstack/axios-fetch-adapter
@@ -50,7 +52,7 @@ A [Miniflare](https://miniflare.dev) testing environment is used in order to sim
 ## Acknowledgements
 The code in this repo draws heavily from the following projects:
 - [vespaiach/axios-fetch-adapter](https://github.com/vespaiach/axios-fetch-adapter): Most of the initial code in this repo was copied from here. Licensed MIT.
-- [axios/axios](https://github.com/axios/axios): Rather than import `axios` for this repo, the necessary types and utility functions were copied directly. Licensed MIT.
+- [axios/axios](https://github.com/axios/axios): The `buildFullPath` function from `axios` has been copied here and modified to be more flexible. Licensed MIT.
 
 ## License
 [MIT](LICENSE)
