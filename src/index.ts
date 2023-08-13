@@ -31,58 +31,75 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import buildURL from "axios/lib/helpers/buildURL";
 import { buildFullPath } from "./buildFullPath";
 
-export default async function fetchAdapter(config: AxiosRequestConfig): Promise<AxiosResponse> {
-  const request = createRequest(config);
-  const promiseChain = [getResponse(request, config)];
-  let timer: NodeJS.Timeout | null = null;
-
-  if (config.timeout && config.timeout > 0) {
-    promiseChain.push(
-      new Promise((_, reject) => {
-        timer = setTimeout(() => {
-          const message = config.timeoutErrorMessage
-            ? config.timeoutErrorMessage
-            : "timeout of " + config.timeout + "ms exceeded";
-          reject(createError(message, config, "ETIMEDOUT", request));
-        }, config.timeout);
-      })
-    );
-  }
-
-  const response = await Promise.race(promiseChain);
-  // Cancel the timeout timer if it's set
-  if (timer !== null) {
-    clearTimeout(timer);
-  }
-  return new Promise((resolve, reject) => {
-    if (response instanceof Error) {
-      reject(response);
-    } else {
-      const validateStatus = config.validateStatus;
-      if (!response.status || !validateStatus || validateStatus(response.status)) {
-        resolve(response);
-      } else {
-        reject(
-          createError(
-            "Request failed with status code " + response.status,
-            config,
-            getErrorCodeFromStatus(response.status),
-            request,
-            response
-          )
-        );
-      }
-    }
-  });
+type FetchFunction = (
+  input: RequestInfo | URL,
+  init?: RequestInit | undefined
+) => Promise<Response>;
+type AdapterFunction = (config: AxiosRequestConfig) => Promise<AxiosResponse>;
+interface FetchAdapterConfig {
+  fetch: FetchFunction;
 }
+
+export function createFetchAdapter(fetchConfig?: FetchAdapterConfig): AdapterFunction {
+  const adapterFetch = fetchConfig ? fetchConfig.fetch : undefined;
+  async function axiosAdapter(config: AxiosRequestConfig): Promise<AxiosResponse> {
+    const request = createRequest(config);
+    const promiseChain = [getResponse(request, config, adapterFetch)];
+    let timer: NodeJS.Timeout | null = null;
+
+    if (config.timeout && config.timeout > 0) {
+      promiseChain.push(
+        new Promise((_, reject) => {
+          timer = setTimeout(() => {
+            const message = config.timeoutErrorMessage
+              ? config.timeoutErrorMessage
+              : "timeout of " + config.timeout + "ms exceeded";
+            reject(createError(message, config, "ETIMEDOUT", request));
+          }, config.timeout);
+        })
+      );
+    }
+
+    const response = await Promise.race(promiseChain);
+    // Cancel the timeout timer if it's set
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+    return new Promise((resolve, reject) => {
+      if (response instanceof Error) {
+        reject(response);
+      } else {
+        const validateStatus = config.validateStatus;
+        if (!response.status || !validateStatus || validateStatus(response.status)) {
+          resolve(response);
+        } else {
+          reject(
+            createError(
+              "Request failed with status code " + response.status,
+              config,
+              getErrorCodeFromStatus(response.status),
+              request,
+              response
+            )
+          );
+        }
+      }
+    });
+  }
+  return axiosAdapter;
+}
+
+const fetchAdapter = createFetchAdapter();
+export default fetchAdapter;
 
 async function getResponse(
   request: Request,
-  config: AxiosRequestConfig
+  config: AxiosRequestConfig,
+  adapterFetch: FetchFunction = fetch
 ): Promise<(AxiosResponse & { ok: boolean }) | AxiosError> {
   let stageOne;
   try {
-    stageOne = await fetch(request);
+    stageOne = await adapterFetch(request);
   } catch (e) {
     return createError("Network Error", config, "ERR_NETWORK", request);
   }

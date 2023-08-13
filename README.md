@@ -4,7 +4,7 @@
 [![codecov badge](https://codecov.io/gh/haverstack/axios-fetch-adapter/branch/main/graph/badge.svg?token=J2J0ANDB3F)](https://codecov.io/gh/haverstack/axios-fetch-adapter)
 [![license badge](https://img.shields.io/github/license/haverstack/axios-fetch-adapter)](./LICENSE)
 
-An Axios adapter that uses native `fetch`. Useful for Cloudflare Workers and ServiceWorker environments.
+An Axios adapter that uses native `fetch` or a custom `fetch` function. Useful for Cloudflare Workers and ServiceWorker environments.
 
 > **Note:** This adapter was designed for version `0.21.1` of Axios, which is still used in prominent e-commerce SDKs.
 
@@ -20,6 +20,18 @@ import fetchAdapter from "@haverstack/axios-fetch-adapter";
 
 const client = axios.create({
   adapter: fetchAdapter
+});
+```
+
+To use with a custom `fetch` function:
+```javascript
+import axios from "axios";
+import { createFetchAdapter } from "@haverstack/axios-fetch-adapter";
+import myCustomFetch from "my-custom-fetch";
+
+const myCustomFetchAdapter = createFetchAdapter({ fetch: myCustomFetch });
+const client = axios.create({
+  adapter: myCustomFetchAdapter
 });
 ```
 

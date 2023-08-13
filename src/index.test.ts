@@ -1,5 +1,6 @@
-import fetchAdapter from ".";
+import fetchAdapter, { createFetchAdapter } from ".";
 import type { AxiosError } from "axios";
+import axios from "axios";
 
 // Test URL
 const url = "http://localhost:1";
@@ -151,6 +152,16 @@ test("Serialization set with `paramsSerializer` produces correct results", async
     paramsSerializer
   });
   expect(result.request.url).toBe(`${url}/?foo=100`);
+});
+
+test("Can set custom `fetch` functions", async () => {
+  const testMsg = "Custom fetch!";
+  const myFetch = async (_: RequestInfo | URL) => {
+    return new Response(testMsg);
+  };
+  const axiosInstance = axios.create({ adapter: createFetchAdapter({ fetch: myFetch }) });
+  const result = await axiosInstance.get(url);
+  expect(result.data).toBe(testMsg);
 });
 
 test("Invalid request will throw an error", async () => {
