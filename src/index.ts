@@ -38,12 +38,14 @@ type FetchFunction = (
 type AdapterFunction = (config: AxiosRequestConfig) => Promise<AxiosResponse>;
 interface FetchAdapterConfig {
   fetch: FetchFunction;
+  disableRequest?: boolean;
 }
 
 export function createFetchAdapter(fetchConfig?: FetchAdapterConfig): AdapterFunction {
   const adapterFetch = fetchConfig ? fetchConfig.fetch : undefined;
+  const disableRequest = fetchConfig && fetchConfig.disableRequest ? true : false;
   async function axiosAdapter(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    const request = createRequest(config);
+    const request = disableRequest && config.url ? config.url : createRequest(config);
     const promiseChain = [getResponse(request, config, adapterFetch)];
     let timer: NodeJS.Timeout | null = null;
 
@@ -93,7 +95,7 @@ const fetchAdapter = createFetchAdapter();
 export default fetchAdapter;
 
 async function getResponse(
-  request: Request,
+  request: Request | string | URL,
   config: AxiosRequestConfig,
   adapterFetch: FetchFunction = fetch
 ): Promise<(AxiosResponse & { ok: boolean }) | AxiosError> {
@@ -177,7 +179,7 @@ function createError(
   message: string,
   config: AxiosRequestConfig,
   code: string,
-  request: Request,
+  request: Request | string | URL,
   response?: AxiosResponse
 ): AxiosError {
   const error = new Error(message) as AxiosError;

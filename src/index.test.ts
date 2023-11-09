@@ -169,6 +169,24 @@ test("Headers are passed to Axios", async () => {
   expect(result.request.headers.get("Content-Type")).toBe("application/json");
 });
 
+test("Default adapter throws for relative URLs with no base", async () => {
+  try {
+    await fetchAdapter({ url: "/bar" });
+    throw new Error("Invalid request didn't throw");
+  } catch (e: unknown) {
+    const error = e as TypeError;
+    expect(error.message).toBe("Failed to parse URL from /bar");
+  }
+});
+
+test("Can disable Request object creation for custom adapters", async () => {
+  const myFetch = async (_: RequestInfo | URL) => new Response("Custom fetch!");
+  const customAdapter = createFetchAdapter({ fetch: myFetch, disableRequest: true });
+  const result = await customAdapter({ url: "/bar" });
+  expect(result.request).toBe("/bar");
+  expect(result.status).toBe(200);
+});
+
 test("Invalid request will throw an error", async () => {
   // Disables fetch mock for the rest of this file
   jest.restoreAllMocks();
