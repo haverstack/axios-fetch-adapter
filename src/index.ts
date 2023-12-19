@@ -104,7 +104,11 @@ async function getResponse(
     return createError("Network Error", config, "ERR_NETWORK", request);
   }
 
-  const headers: any = Object.assign({}, stageOne.headers as unknown);
+  const stageOneHeaders: Record<string, string> = {};
+  stageOne.headers.forEach((value, key) => {
+    stageOneHeaders[key] = value;
+  });
+  const headers: any = Object.assign({}, stageOneHeaders as unknown);
   const response: AxiosResponse = {
     status: stageOne.status,
     statusText: stageOne.statusText,
