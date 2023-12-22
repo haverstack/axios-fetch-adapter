@@ -164,6 +164,11 @@ test("Can set custom `fetch` functions", async () => {
   expect(result.data).toBe(testMsg);
 });
 
+test("Headers are passed to Axios", async () => {
+  const result = await fetchAdapter({ url, headers: { "Content-Type": "application/json" } });
+  expect(result.request.headers.get("Content-Type")).toBe("application/json");
+});
+
 test("Invalid request will throw an error", async () => {
   // Disables fetch mock for the rest of this file
   jest.restoreAllMocks();
