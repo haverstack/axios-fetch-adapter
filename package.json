@@ -5,11 +5,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/index.esm.js",
-  "exports": [
-    "./lib/index.d.ts",
-    "./lib/index.esm.js",
-    "./lib/index.js"
-  ],
   "scripts": {
     "build:js": "node build.js",
     "build:types": "tsc --project ./tsconfig.build.json",
