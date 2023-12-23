@@ -14,6 +14,7 @@ npm install @haverstack/axios-fetch-adapter
 ```
 
 ## Use
+The default use-case for this library is:
 ```javascript
 import axios from "axios";
 import fetchAdapter from "@haverstack/axios-fetch-adapter";
@@ -23,7 +24,8 @@ const client = axios.create({
 });
 ```
 
-To use with a custom `fetch` function:
+### Using with custom `fetch` functions
+If your application does not use a globally-available `fetch`, you can specify your own custom `fetch` function instead:
 ```javascript
 import axios from "axios";
 import { createFetchAdapter } from "@haverstack/axios-fetch-adapter";
@@ -35,7 +37,25 @@ const client = axios.create({
 });
 ```
 
-To use with the Square API:
+If your application allows for using non-fully-qualified URLs, e.g. `/foo`, use the `disableRequest` option to pass URLs directly to your custom `fetch` function without creating a `Request` object:
+```javascript
+import axios from "axios";
+import { createFetchAdapter } from "@haverstack/axios-fetch-adapter";
+import myCustomFetch from "my-custom-fetch";
+
+const customAdapter = createFetchAdapter({
+  fetch: myCustomFetch,
+  disableRequest: true
+});
+const client = axios.create({
+  adapter: myCustomFetchAdapter
+});
+```
+
+**Note:** A side effect of the `disableRequest` option is that the `AxiosResponse` object will only have the request URL in its `request` property instead of a `Request` object. This means that accessing, for example, `response.request.url` will throw an error.
+
+### Using with the Square Node.js SDK
+To use this library with the [`square`](https://www.npmjs.com/package/square) package to manage your [Square](https://squareup.com/) resources:
 ```javascript
 import { Client, Environment } from "square";
 import fetchAdapter from "@haverstack/axios-fetch-adapter";
