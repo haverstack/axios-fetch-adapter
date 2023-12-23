@@ -1,6 +1,6 @@
 {
   "name": "@haverstack/axios-fetch-adapter",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "An Axios adapter that uses native fetch or custom fetch functions. Useful for Cloudflare Workers and ServiceWorker environments.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
