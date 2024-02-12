@@ -106,9 +106,20 @@ async function getResponse(
     return createError("Network Error", config, "ERR_NETWORK", request);
   }
 
-  const stageOneHeaders: Record<string, string> = {};
+  const stageOneHeaders: Record<string, string | string[]> = {};
   stageOne.headers.forEach((value, key) => {
-    stageOneHeaders[key] = value;
+    // The `Set-Cookie` header is treated as an array of strings (even if there's only 1)
+    if (key === "set-cookie") {
+      const cookies = stageOneHeaders[key] as string[] | undefined
+
+      if (cookies) {
+        cookies.push(value);
+      } else {
+        stageOneHeaders[key] = [value];
+      }
+    } else {
+      stageOneHeaders[key] = value;
+    }
   });
   const headers: any = Object.assign({}, stageOneHeaders as unknown);
   const response: AxiosResponse = {
